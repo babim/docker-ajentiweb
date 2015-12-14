@@ -4,7 +4,7 @@ MAINTAINER Babim "ducanh.babim@yahoo.com"
 
 #Ajenti
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
 RUN wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-ubuntu.sh | sudo sh
 
@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx a
 
 #phpMyAdmin
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip
-RUN tar -zxvf phpMyAdmin-4.5.2-all-languages.zip -C /opt/
+RUN unzip phpMyAdmin-4.5.2-all-languages.zip -C /opt/
 RUN rm -f phpMyAdmin-4.5.2-all-languages.zip
 RUN mv /opt/phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin
 ADD vh.json /etc/ajenti/vh.json
