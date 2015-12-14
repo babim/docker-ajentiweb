@@ -40,6 +40,10 @@ RUN echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
 
 RUN useradd -m -g www-data sftpuser
 
+RUN apt-get clean && \
+    apt-get autoclean && \
+    apt-get autoremove -y
+
 #RUN chown root:www-data /srv/
 #RUN chmod 775 /srv/
 
