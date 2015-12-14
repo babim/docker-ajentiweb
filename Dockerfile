@@ -12,9 +12,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx a
 
 #phpMyAdmin
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip
-RUN unzip phpMyAdmin-4.5.2-all-languages.zip -C /opt/
+RUN unzip phpMyAdmin-4.5.2-all-languages.zip
 RUN rm -f phpMyAdmin-4.5.2-all-languages.zip
-RUN mv /opt/phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin
+RUN mv phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin
 ADD vh.json /etc/ajenti/vh.json
 
 #Backups
