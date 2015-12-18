@@ -1,20 +1,24 @@
-FROM babim/ubuntubase
+FROM babim/debianbase
 
 MAINTAINER Babim "ducanh.babim@yahoo.com"
 
 #Ajenti
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip
-RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes
-RUN wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-ubuntu.sh | sudo sh
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip && \
+    echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list.d/dotweb.list && \
+    echo 'deb-src http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list.d/dotweb.list && \
+    wget http://www.dotdeb.org/dotdeb.gpg -O- |apt-key add – && \
+    rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
+    wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
+    apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx ajenti-v-mysql ajenti-v-php-fpm php5-mysql ajenti-v-mail ajenti-v-nodejs ajenti-v-python-gunicorn ajenti-v-ruby-puma ajenti-v-ruby-unicorn 
 
 #phpMyAdmin
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip
-RUN unzip phpMyAdmin-4.5.2-all-languages.zip
-RUN rm -f phpMyAdmin-4.5.2-all-languages.zip
-RUN mv phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip && \
+    unzip phpMyAdmin-4.5.2-all-languages.zip && \
+    rm -f phpMyAdmin-4.5.2-all-languages.zip && \
+    mv phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin && \
 ADD vh.json /etc/ajenti/vh.json
 
 #Backups
@@ -47,6 +51,7 @@ RUN apt-get clean && \
 #RUN chown root:www-data /srv/
 #RUN chmod 775 /srv/
 
+ENV LC_ALL C.UTF-8
 EXPOSE 80 8000 443 3306 22
 
 CMD ["/usr/sbin/entrypoint.sh"]
