@@ -61,6 +61,9 @@ RUN apt-get clean && \
 #RUN chown root:www-data /srv/
 #RUN chmod 775 /srv/
 
+# Define mountable directories.
+VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
+
 ENV LC_ALL C.UTF-8
 EXPOSE 80 8000 443 3306 22
 
