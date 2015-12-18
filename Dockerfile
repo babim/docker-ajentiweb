@@ -1,13 +1,11 @@
-FROM babim/debianbase
+FROM babim/ubuntubase
 
 MAINTAINER Babim "ducanh.babim@yahoo.com"
 
 #Ajenti
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip && \
-    echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list.d/dotweb.list && \
-    echo 'deb-src http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list.d/dotweb.list && \
-    wget http://www.dotdeb.org/dotdeb.gpg -O- |apt-key add – && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip software-properties-common && \
+    add-apt-repository ppa:ondrej/php5-5.6 -y && \
     rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
     wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
     apt-get update
