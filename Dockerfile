@@ -65,6 +65,7 @@ RUN apt-get clean && \
 VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
 ENV LC_ALL C.UTF-8
+ENV TZ Asia/Ho_Chi_Minh
 EXPOSE 80 8000 443 3306 22
 
 CMD ["/usr/sbin/entrypoint.sh"]
