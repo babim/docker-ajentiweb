@@ -42,5 +42,6 @@ chown www-data:www-data /var/www/sites
 chmod 775 /var/www/sites
 
 service mysql start
+service nginx start
 
 /usr/bin/ajenti-panel
