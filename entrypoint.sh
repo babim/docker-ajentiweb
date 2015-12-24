@@ -44,6 +44,7 @@ chmod 775 /var/www/sites
 service mysql start
 service nginx start
 service pure-ftpd start
+service php5-fpm start
 service exim4 start
 
 /usr/bin/ajenti-panel
