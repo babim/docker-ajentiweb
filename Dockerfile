@@ -10,7 +10,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip software-prop
     wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
     apt-get update
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx ajenti-v-mysql ajenti-v-php-fpm php5-mysql ajenti-v-mail ajenti-v-nodejs ajenti-v-python-gunicorn ajenti-v-ruby-puma ajenti-v-ruby-unicorn 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx ajenti-v-mysql ajenti-v-php-fpm \
+    php5-mysql ajenti-v-mail ajenti-v-nodejs ajenti-v-python-gunicorn ajenti-v-ruby-puma ajenti-v-ruby-unicorn 
 
 #phpMyAdmin
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip && \
@@ -69,4 +70,3 @@ ENV TZ Asia/Ho_Chi_Minh
 EXPOSE 80 8000 443 3306 22
 
 CMD ["/usr/sbin/entrypoint.sh"]
-CMD ["/usr/sbin/sshd", "-D"]
