@@ -46,5 +46,6 @@ service nginx start
 service pure-ftpd start
 service php5-fpm start
 service exim4 start
+service ssh start
 
 /usr/bin/ajenti-panel
