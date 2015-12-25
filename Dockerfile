@@ -4,9 +4,7 @@ MAINTAINER Babim "ducanh.babim@yahoo.com"
 
 #Ajenti
 RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq  wget unzip software-properties-common && \
-    add-apt-repository ppa:ondrej/php5-5.6 -y && \
-    rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
+RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
     wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
     apt-get update
 
