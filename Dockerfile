@@ -3,7 +3,6 @@ FROM babim/ubuntubase
 MAINTAINER Babim "ducanh.babim@yahoo.com"
 
 #Ajenti
-RUN apt-get update
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
     wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
     apt-get update
@@ -63,7 +62,7 @@ RUN apt-get clean && \
 # Define mountable directories.
 VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
-ENV LC_ALL C.UTF-8
+ENV LC_ALL en_US.UTF-8
 ENV TZ Asia/Ho_Chi_Minh
 EXPOSE 80 8000 443 3306 22
 
