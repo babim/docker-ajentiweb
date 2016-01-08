@@ -21,8 +21,8 @@ ADD backup /etc/backup.d/
 RUN chmod 0600 /etc/backup.* -R
 
 #Entrypoint
-ADD entrypoint.sh /usr/sbin/entrypoint.sh
-RUN chmod +x /usr/sbin/entrypoint.sh
+ADD entrypoint.sh /etc/my_init.d/startup.sh
+RUN chmod +x /etc/my_init.d/startup.sh
 
 #SFTP
 
@@ -62,4 +62,4 @@ VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
 EXPOSE 80 8000 443 3306 22
 
-CMD ["/usr/sbin/entrypoint.sh"]
+CMD ["/etc/my_init.d/startup.sh"]
