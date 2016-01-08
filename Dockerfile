@@ -62,4 +62,4 @@ VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
 EXPOSE 80 8000 443 3306
 
-CMD ["/etc/my_init.d/startup.sh"]
+CMD ["/sbin/my_init"]
