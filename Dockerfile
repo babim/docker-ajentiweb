@@ -61,5 +61,3 @@ RUN apt-get clean && \
 VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
 EXPOSE 80 8000 443 3306 22
-
-CMD ["/sbin/my_init"]
