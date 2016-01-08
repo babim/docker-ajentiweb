@@ -1,4 +1,4 @@
-FROM babim/ubuntubase
+FROM babim/ubuntubaseinit
 
 #Ajenti
 RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
