@@ -1,63 +1,55 @@
-FROM babim/ubuntubaseinit
+FROM babim/centos6base
 
-#Ajenti
-RUN rm /etc/apt/apt.conf.d/docker-gzip-indexes && \
-    wget -O- https://raw.github.com/ajenti/ajenti/1.x/scripts/install-debian.sh | sudo sh && \
-    apt-get update
+# Centos default image for some reason does not have tools like Wget/Tar/etc so lets add them
+RUN yum -y install wget tar
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq ajenti-v ajenti-v-nginx ajenti-v-mysql ajenti-v-php-fpm \
-    php5-mysql ajenti-v-mail ajenti-v-nodejs ajenti-v-python-gunicorn ajenti-v-ruby-puma ajenti-v-ruby-unicorn unzip
+RUN wget -O- https://raw.githubusercontent.com/ajenti/ajenti/1.x/scripts/install-rhel.sh | sh
 
-#phpMyAdmin
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.5.2/phpMyAdmin-4.5.2-all-languages.zip && \
-    unzip phpMyAdmin-4.5.2-all-languages.zip && \
-    rm -f phpMyAdmin-4.5.2-all-languages.zip && \
-    mv phpMyAdmin-4.5.2-all-languages /opt/phpMyAdmin
-ADD vh.json /etc/ajenti/vh.json
+# install the Mysql / php / git / cron / duplicity / backup ninja
+RUN yum -y install /sbin/service which nano openssh-server git mysql-server mysql php-mysql \
+			  php-gd php-mcrypt php-zip php-xml php-iconv php-curl php-soap php-simplexml \
+			  php-pdo php-dom php-cli tar dbus-python.x86_64 dbus-python-devel.x86_64 dbus \
+			  php-hash php-mysql vixie-cron backupninja duplicity dialog
 
-#Backups
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq backupninja duplicity
+RUN yum -y install vsftpd
+
+#install Ajenti the control panel
+RUN yum -y install ajenti-v ajenti-v-ftp-vsftpd ajenti-v-php-fpm ajenti-v-mysql
+
+## fix the locale problems iwth default centos image.. may not be necessary in future. 
+RUN yum -y reinstall glibc-common
+
+# setup the services to start on the container bootup
+# centos6
+RUN chkconfig mysqld on && chkconfig nginx on && chkconfig php-fpm on && chkconfig crond on && chkconfig ajenti on
+# centos7
+#RUN systemctl enable mysqld && systemctl enable nginx && systemctl enable php-fpm && systemctl enable crond && systemctl enable ajenti
+
+# defaut centos image seems to have issues with few missing files from this library
+RUN yum -y install cracklib-dicts.x86_64
+
+#allow the ssh root access.. - Diable if you dont need but for our containers we prefer SSH access.
+RUN sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config
+RUN sed -i "s/#PermitRootLogin/PermitRootLogin/g" /etc/ssh/sshd_config
+
+#cron needs this fix
+RUN sed -i '/session    required   pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/crond
+
+RUN echo 'root:root' | chpasswd
+
+RUN mkdir /scripts
+ADD mysqlsetup.sh /scripts/mysqlsetup.sh
+RUN chmod 0755 /scripts/*
+
+RUN echo "/scripts/mysqlsetup.sh" >> /etc/rc.d/rc.local
+
 ADD backup /etc/backup.d/
+
 RUN chmod 0600 /etc/backup.* -R
-
-#Entrypoint
-ADD entrypoint.sh /etc/my_init.d/startup.sh
-RUN chmod +x /etc/my_init.d/startup.sh
-
-#SFTP
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yq openssh-server 
-
-RUN grep -v "Subsystem sftp /usr/lib/openssh/sftp-server" /etc/ssh/sshd_config > /etc/ssh/sshd_config2 && mv /etc/ssh/sshd_config2 /etc/ssh/sshd_config
-RUN echo "Subsystem sftp internal-sftp" >> /etc/ssh/sshd_config
-RUN echo "Match group www-data" >> /etc/ssh/sshd_config
-RUN echo "ChrootDirectory /var/www/" >> /etc/ssh/sshd_config
-RUN echo "X11Forwarding no" >> /etc/ssh/sshd_config
-RUN echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
-RUN echo "ForceCommand internal-sftp" >> /etc/ssh/sshd_config
-
-#RUN mkdir /var/run/sshd
-## set password root is root
-#RUN echo 'root:root' | chpasswd
-## allow root ssh
-#RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-## SSH login fix. Otherwise user is kicked off after login
-#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
-
-RUN useradd -m -g www-data sftpuser
-
-RUN apt-get clean && \
-    apt-get autoclean && \
-    apt-get autoremove -y
-
-#RUN chown root:www-data /srv/
-#RUN chmod 775 /srv/
 
 # Define mountable directories.
 VOLUME ["/var/www", "/data", "/etc/nginx/conf.d", "/backup", "/var/lib/mysql"]
 
-EXPOSE 80 8000 443 3306
+EXPOSE 22 80 8000 3306 443
+
+CMD ["/sbin/init"]
