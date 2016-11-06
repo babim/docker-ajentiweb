@@ -46,6 +46,10 @@ service nginx start
 #service pure-ftpd start
 service php5-fpm start
 service exim4 start
+
+# set password root is root
+SSHPASS1=${SSHPASS:-root}
+echo "root:$SSHPASS1" | chpasswd
 service ssh start
 
 /usr/bin/ajenti-panel
