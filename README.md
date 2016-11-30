@@ -1,3 +1,7 @@
+[![](https://images.microbadger.com/badges/image/babim/ajentiweb.svg)](https://microbadger.com/images/babim/ajentiweb "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/babim/ajentiweb.svg)](https://microbadger.com/images/babim/ajentiweb "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/babim/ajentiweb:ssh.svg)](https://microbadger.com/images/babim/ajentiweb:ssh "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/babim/ajentiweb:ssh.svg)](https://microbadger.com/images/babim/ajentiweb:ssh "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/babim/ajentiweb:centos.svg)](https://microbadger.com/images/babim/ajentiweb:centos "Get your own image badge on microbadger.com")[![](https://images.microbadger.com/badges/version/babim/ajentiweb:centos.svg)](https://microbadger.com/images/babim/ajentiweb:centos "Get your own version badge on microbadger.com")
+
 Just Test - fail when create new website and apply
 
 #=RUN
